@@ -47,14 +47,18 @@ $(document).ready(function() {
                 $(newSubmitButton).on("click", function(event){
                     // prevent default, otherwise it will reload the page after clicking submit
                     event.preventDefault();                    
+
                     // set a variable to the input ID
                     var $initials = $("#initials"); 
+
                     // get the value of the user's input and turn it into a string 
                     var $newInputElementString = JSON.stringify($initials.val());
-                    // store the string
-                    localStorage.setItem("inputValue", $newInputElementString);
+
                     // concatenate the new string with the number of seconds left to create the high score
                     newHighScore = $newInputElementString + " - " + secondsLeft;
+
+                    // store the high score
+                    localStorage.setItem("newScore", newHighScore);
                     // console.log to check that it worked -- it did!
                     console.log(newHighScore);
               
