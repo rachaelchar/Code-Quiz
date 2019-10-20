@@ -7,7 +7,8 @@ var $timerElement = $("#timer");
 var secondsLeft = 75;
 var $contentDiv = $("#content");
 var currentQ = 0;
-var lastQuestion = questions.length - 1
+var lastQuestion = questions.length - 1;
+var $outcomeAlert = $("#outcome-alert");
 
 
 
@@ -18,6 +19,10 @@ $(document).ready(function () {
     $startBtn.on("click", function () {
         // clear the landing page content
         content.innerHTML = "";
+
+        // call the function to render the questions
+        renderQuestions();
+
         // start countdown
         var timerInterval = setInterval(function () {
             // decrement seconds left by 1
@@ -25,7 +30,7 @@ $(document).ready(function () {
             // set the text content of the timer element to the seconds left
             $timerElement.text("Time Left/Score: " + secondsLeft);
 
-            // When the timer reaches 0 or if the incurrs time penalties that decrement below 0...
+            // When the timer reaches 0 or if the user incurs time penalties that decrement below 0...
             if (secondsLeft <= 0) {
 
                 // clear the html (which will be whatever question they are on)
@@ -106,21 +111,31 @@ $(document).ready(function () {
             // ADD CLICK EVENTS TO CHOICES BUTTONS //
 
 
-            $(".choices-btn").on("click", function () {
+            $(".choices-btn").on("click", function (event) {
                 // set a variable to represent the option the user clicked on
                 var clickedChoice = this;
 
                 // check that the option they chose is the correct answer; decrement the seconds if wrong
                 if (clickedChoice.textContent === questions[currentQ].answer) {
-                    alert("correct!");
+
+                    // ALERTS ARE ONLY WORKING ON THE FIRST QUESTION //
+                    // alert("correct!")
+                    $outcomeAlert.html("<h3 class='text-success'><br>Nice job!<hr></h3>");
+                    // delay keeps the new text on the page for 1/2 second then fades away 
+                    // source: https://stackoverflow.com/questions/39391782/add-element-to-document-and-then-remove-it-using-jquery
+                    $outcomeAlert.delay(500).fadeOut(100);
+
                 } else {
-                    alert("wrong");
+                    $outcomeAlert.html("<h3 class='text-warning'><br>Nope!<hr></h3>");
+                    $outcomeAlert.delay(500).fadeOut(100);
                     secondsLeft = secondsLeft - 15;
                 }
 
-                // if you have reached the end of the last question, stop the game
+                // if user has reached the end of the last question, stop the game
                 if (currentQ === lastQuestion){
-                    alert("done");
+                    alert("You're done!");
+                    // Not pausing the timer or showing the "all done screen" after last question...
+                    clearInterval(timerInterval);
                 // otherwise, advance to the next question
                 } else {
                 currentQ++;
@@ -129,16 +144,8 @@ $(document).ready(function () {
 
             });
 
-
         }
 
-        if (currentQ <= lastQuestion) {
-        renderQuestions();
-        } else {
-            alert("You're done");
-        }
-
-        // stop the game when they finish the last question
     });
 
 
