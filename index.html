@@ -13,23 +13,30 @@
 
 <body>
 
-    <button id="viewScoresBtn" class="btn btn-outline-success m-4">View Highscores</button>
+    <button  class="view-scores-btn btn btn-outline-success m-4">View Highscores</button>
+    <h5 id="timer" class="float-right m-4"></h2>
 
-    <div class="row justify-content-center landing-page">
+    <div id="content" class="row justify-content-center">
         <div class="col-md-6 col-sm-12 text-center">
-            <h1 id="quiz-title" class="text-success">Coding Quiz Challenge</h1>
+            <h1 class="text-success">Coding Quiz Challenge</h1>
             <p class="text-muted">Test your coding knowledge with this timed quiz.
-                You have 75
-                seconds to complete the quiz; your final time is your score! But be careful - if you get a question
+                You have 75 seconds to complete the quiz; your final time is your score! But be careful - if you get a question
                 wrong, there will be a time penalty.</p>
-            <button class="btn btn-success">Start Quiz</button>
+            <button id=startQuizBtn class="btn btn-success">Start Quiz</button>
         </div>
     </div>
+    <div class="outcome-alert"></div>
+    <div>
+        <ol id="high-scores-list">
+        </ol>
+    </div>
+    
 
-    <script>
-        src = "https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity = "sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin = "anonymous" ></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+
     <script src="questions.js"></script>
     <script src="script.js"></script>
 </body>
