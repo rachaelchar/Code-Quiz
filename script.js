@@ -7,21 +7,18 @@ var $timerElement = $("#timer");
 var secondsLeft = 75;
 var $contentDiv = $("#content");
 var currentQ = 0;
-// var choices = ["while loop", "prompt", "alert", "for loop"];
 
-
-// while loop -- while secondsLeft !== 0 && < questions.length
-// Within while loop, call renderQuestions(questions[i])
-// Change to setTimeout?
 
 
 $(document).ready(function () {
+
+    // TIMER //
 
     $startBtn.on("click", function () {
         // clear the landing page content
         content.innerHTML = "";
         // start countdown
-        var timerInterval = setInterval(function() {
+        var timerInterval = setInterval(function () {
             // decrement seconds left by 1
             secondsLeft--;
             // set the text content of the timer element to the seconds left
@@ -29,6 +26,7 @@ $(document).ready(function () {
 
             // When the timer reaches 0...
             if (secondsLeft === 0) {
+                
                 // clear the html (which will be whatever question they are on)
                 content.innerHTML = "";
 
@@ -49,7 +47,7 @@ $(document).ready(function () {
 
                 // create a new input element within a form. Use input type="submit" so that the button will work with the input field
                 // Source: https://stackoverflow.com/questions/290215/difference-between-input-type-button-and-input-type-submit
-                var $newInputElement = $("<div><p>Enter intials: <form><input id='initials'></input> <input type='submit' id='newSubmitButton'></button></form></p></div>");
+                var $newInputElement = $("<div><p>Enter initials: <form><input id='initials'></input> <input type='submit' id='newSubmitButton'></button></form></p></div>");
 
                 // append the input element
                 $newTitleElement.append($newInputElement);
@@ -82,19 +80,18 @@ $(document).ready(function () {
 
 
 
-        // QUESTIONS //
+        // RENDERING QUESTIONS //
 
-        // x will help us loop through the array of questions
 
         function renderQuestions() {
             content.innerHTML = "";
-            var $newQuestionTitle = $("<div class='text-muted'><br><h3>"+questions[currentQ].title+"</h3></div>");
+            var $newQuestionTitle = $("<div class='text-muted'><br><h3>" + questions[currentQ].title + "</h3></div>");
             $contentDiv.append($newQuestionTitle);
             console.log(questions[currentQ].choices);
 
-            for (var i = 0; i < questions[currentQ].choices.length; i++){
+            for (var i = 0; i < questions[currentQ].choices.length; i++) {
                 var $choicesBtn = $("<button>", {
-                    class: "btn-outline-success m-4 h5 p-2"
+                    class: "choices-btn btn-outline-success m-4 h5 p-2"
                 });
 
                 $choicesBtn.attr("data-choices", questions[currentQ].choices[i]);
@@ -102,27 +99,49 @@ $(document).ready(function () {
                 $contentDiv.append($choicesBtn);
             }
 
-            // // Need to list as an ordered list
-            // var $newChoices = $("<div class='text-muted'><br><ol></ol></div>");
-            // $newQuestionTitle.append($newChoices);
-    }
-        renderQuestions();
+            $(".choices-btn").on("click", function () {
+                var clickedChoice = this;
+                // not currently working
+                if (clickedChoice === currentQ.answer){
+                    alert("correct!");
+                }
+                currentQ++;
+                renderQuestions();
+            });
+        }
+
+        if (currentQ < questions.length){
+            renderQuestions();
+        } else {
+
+        }
+
+
+
+        // ADD CLICK EVENTS TO CHOICES BUTTONS //
+
+
+
+
 
     });
 
-    // function renderHighScores() {
-    //     // clear the HTML every time this function runs
-    //     highScoresList.innerHTML = "";
-    // }
+
+
+
+
+
+
+
+    // ** FOR HIGHSCORES ** //
 
     $viewScoresBtn.on("click", function () {
         renderHighScores();
     });
 
-    // ** FOR HIGHSCORES PAGE** //
 
     $("#goBackBtn").on("click", function () {
 
-
     });
+
 });
