@@ -1,6 +1,6 @@
 var questions = [
     {
-        title: "If you are looking for a typed response from the user, you might use a __________",
+        title: "If you are looking for a typed response from the user, you might use a/an __________",
         choices: ["while loop", "prompt", "alert", "for loop"],
         answer: "prompt"
     },

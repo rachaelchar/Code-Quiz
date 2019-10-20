@@ -1,19 +1,25 @@
 // define variables
-var highScoresList = "";
+var highscoresArray = [];
 var newHighScore = "";
-var $viewScoresBtn = $("#viewScoresBtn");
+var $viewScoresBtn = $(".view-scores-btn");
 var $startBtn = $("#startQuizBtn");
 var $timerElement = $("#timer");
 var secondsLeft = 75;
 var $contentDiv = $("#content");
 var currentQ = 0;
-var lastQuestion = questions.length - 1;
+var lastQuestion = questions.length;
 var $outcomeAlert = $("#outcome-alert");
+var $highscoresOl = $("#high-scores-list");
 
 
 
 $(document).ready(function () {
 
+    function storeHighscores() {
+        // function to stringify the highscores array and save it to the "highscores" key in localStorage
+        var highscoresJSON = JSON.stringify(highscoresArray);
+        localStorage.setItem("highscoresArray", highscoresJSON);
+    }
     // START BUTTON CLICK EVENT & TIMER //
 
     $startBtn.on("click", function () {
@@ -31,7 +37,7 @@ $(document).ready(function () {
             $timerElement.text("Time Left/Score: " + secondsLeft);
 
             // When the timer reaches 0 or if the user incurs time penalties that decrement below 0...
-            if (secondsLeft <= 0) {
+            if (secondsLeft <= 0 || currentQ === lastQuestion) {
 
                 // clear the html (which will be whatever question they are on)
                 content.innerHTML = "";
@@ -64,22 +70,23 @@ $(document).ready(function () {
                     // prevent default, otherwise the page will reload after the user clicks submit
                     event.preventDefault();
 
-                    // set a variable to the input ID
-                    var $initials = $("#initials");
-
-                    // get the value of the user's input and turn it into a string 
-                    var $newInputElementString = JSON.stringify($initials.val());
+                    // set a variable to what the user entered
+                    var $initials = $("#initials").val();
 
                     // concatenate the new string with the number of seconds left to create the high score
-                    newHighScore = $newInputElementString + " - " + secondsLeft;
+                    newHighScore = $initials + " - " + secondsLeft;
 
-                    // store the high score
-                    localStorage.setItem("newScore", newHighScore);
+                    // following code is based on the Todos activity
+                    var highscoresText = newHighScore.value;
 
-                    // console.log to check that it worked -- it did!
-                    console.log(newHighScore);
+                    // Add new todoText to todos array, clear the input
+                    highscoresArray.push(highscoresText);
+
+                    storeHighscores();
+                    renderHighScores()
 
                 });
+
             }
             // pass in the second argument which tells it to decrement once per second
         }, 1000);
@@ -132,14 +139,9 @@ $(document).ready(function () {
                 }
 
                 // if user has reached the end of the last question, stop the game
-                if (currentQ === lastQuestion){
-                    alert("You're done!");
-                    // Not pausing the timer or showing the "all done screen" after last question...
-                    clearInterval(timerInterval);
-                // otherwise, advance to the next question
-                } else {
-                currentQ++;
-                renderQuestions();
+                if (currentQ !== lastQuestion) {
+                    currentQ++;
+                    renderQuestions();
                 }
 
             });
@@ -150,14 +152,26 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
     // ** FOR HIGHSCORES ** //
 
+    // The following block of code is based on the Todos activity
+    function renderHighScores() {
+        // Clear todoList element and update todoCountSpan
+        $highscoresOl.innerHTML = "";
+
+        // Render a new li for each highscore
+        for (var j = 0; j < highscoresArray.length; j++) {
+            var highscoreLi = highscoresArray[j];
+
+            var li = $("<li>" + highscoreLi + "</li>");
+            // li.text(highscoreLi);
+            $highscoresOl.append(li);
+        }
+    }
+
     $viewScoresBtn.on("click", function () {
+        alert("clicked");
+        content.innerHTML = "";
         renderHighScores();
     });
 
