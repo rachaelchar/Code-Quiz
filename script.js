@@ -7,12 +7,13 @@ var $timerElement = $("#timer");
 var secondsLeft = 75;
 var $contentDiv = $("#content");
 var currentQ = 0;
+var lastQuestion = questions.length - 1
 
 
 
 $(document).ready(function () {
 
-    // TIMER //
+    // START BUTTON CLICK EVENT & TIMER //
 
     $startBtn.on("click", function () {
         // clear the landing page content
@@ -24,9 +25,9 @@ $(document).ready(function () {
             // set the text content of the timer element to the seconds left
             $timerElement.text("Time Left/Score: " + secondsLeft);
 
-            // When the timer reaches 0...
-            if (secondsLeft === 0) {
-                
+            // When the timer reaches 0 or if the incurrs time penalties that decrement below 0...
+            if (secondsLeft <= 0) {
+
                 // clear the html (which will be whatever question they are on)
                 content.innerHTML = "";
 
@@ -80,8 +81,7 @@ $(document).ready(function () {
 
 
 
-        // RENDERING QUESTIONS //
-
+        // RENDER QUESTIONS //
 
         function renderQuestions() {
             content.innerHTML = "";
@@ -89,41 +89,56 @@ $(document).ready(function () {
             $contentDiv.append($newQuestionTitle);
             console.log(questions[currentQ].choices);
 
+            // this for loop inspired by refridgerator acitivity for loop
             for (var i = 0; i < questions[currentQ].choices.length; i++) {
                 var $choicesBtn = $("<button>", {
                     class: "choices-btn btn-outline-success m-4 h5 p-2"
                 });
 
-                $choicesBtn.attr("data-choices", questions[currentQ].choices[i]);
+                // $choicesBtn.attr("data-choices", questions[currentQ].choices[i]);
+                // set the text of the buttons to the choices array of the current question
                 $choicesBtn.text(questions[currentQ].choices[i]);
+                // append the buttons
                 $contentDiv.append($choicesBtn);
             }
 
+
+            // ADD CLICK EVENTS TO CHOICES BUTTONS //
+
+
             $(".choices-btn").on("click", function () {
+                // set a variable to represent the option the user clicked on
                 var clickedChoice = this;
-                // not currently working
-                if (clickedChoice === currentQ.answer){
+
+                // check that the option they chose is the correct answer; decrement the seconds if wrong
+                if (clickedChoice.textContent === questions[currentQ].answer) {
                     alert("correct!");
+                } else {
+                    alert("wrong");
+                    secondsLeft = secondsLeft - 15;
                 }
+
+                // if you have reached the end of the last question, stop the game
+                if (currentQ === lastQuestion){
+                    alert("done");
+                // otherwise, advance to the next question
+                } else {
                 currentQ++;
                 renderQuestions();
+                }
+
             });
+
+
         }
 
-        if (currentQ < questions.length){
-            renderQuestions();
+        if (currentQ <= lastQuestion) {
+        renderQuestions();
         } else {
-
+            alert("You're done");
         }
 
-
-
-        // ADD CLICK EVENTS TO CHOICES BUTTONS //
-
-
-
-
-
+        // stop the game when they finish the last question
     });
 
 
@@ -141,7 +156,6 @@ $(document).ready(function () {
 
 
     $("#goBackBtn").on("click", function () {
-
     });
 
 });
