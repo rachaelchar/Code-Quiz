@@ -19,6 +19,29 @@ $(document).ready(function () {
         // function to stringify the highscores array and save it to the "highscores" key in localStorage
         var highscoresJSON = JSON.stringify(highscoresArray);
         localStorage.setItem("highscoresArray", highscoresJSON);
+
+        // ** NOT CURRENTLY WORKING **
+        // // Create and append Go Back button 
+        // var $goBackBtn = $("<button class='btn-success'>Go Back</button>");
+        // $highscoresOl.append($goBackBtn);
+
+        // // set GoBack button click function to reload page
+        // $goBackBtn.on("click", function () {
+        //     // source: https://stackoverflow.com/questions/29884654/button-that-refreshes-the-page-on-click
+        //     window.location.reload();
+        // });
+
+        // // Create and append Clear Highscores button
+        // var $clearScoresBtn = $("<button class='btn-warning'>Clear Highscores</button>");
+        // $highscoresOl.append($clearScoresBtn);
+
+        // // set GoBack button click function to reload page
+        // $clearScoresBtn.on("click", function () {
+        //      $highscoresOl.html("");
+        //      localStorage.removeItem(storedHighscores);
+        // });
+
+
     }
     // START BUTTON CLICK EVENT & TIMER //
 
@@ -76,11 +99,17 @@ $(document).ready(function () {
                     // concatenate the new string with the number of seconds left to create the high score
                     newHighScore = $initials + " - " + secondsLeft;
 
-                    // Adds the new highscore to highscores array, clear the input
+
+                    // This is supposed to add the new highscore to highscores array, but there is only ever 1 item in the array
                     highscoresArray.push(newHighScore);
+
+                    // clear the input area
+                    $("#initials").val('');
 
                     storeHighscores();
                     renderHighScores();
+
+                    console.log(highscoresArray);
 
                 });
 
@@ -113,7 +142,7 @@ $(document).ready(function () {
 
             // ADD CLICK EVENTS TO CHOICES BUTTONS //
 
-
+            // *Note* There is definitely somthing wrong with this section of code... My outcome alerts are not working properly and I had to add the || currentQ === lastQuestion part in the if statement above because its equivalent wasn't working here.
             $(".choices-btn").on("click", function (event) {
                 // set a variable to represent the option the user clicked on
                 var clickedChoice = this;
@@ -150,34 +179,22 @@ $(document).ready(function () {
 
     // ** FOR HIGHSCORES ** //
 
-    // function init() {
-    //     // Write code here to check if there are highscores in localStorage
-    //     // If so, parse the value from localStorage and assign it to the highscores variable
-    //     var storedHighscores = JSON.parse(localStorage.getItem("highscoresArray"));
-
-    //     if (storedHighscores !== null) {
-    //         highscoresArray = storedHighscores;
-    //     }
-
-    //     // Store updated highscores in localStorage, re-render the list
-    //     renderHighScores();
-    // }
-
     // The following block of code is based on the Todos activity
     function renderHighScores() {
 
+        // Clear highscores element and content div 
+        // * Scores list not currently clearing
+        $(".scores-list").innerHTML = "";
+        content.innerHTML = "";
+
         var storedHighscores = JSON.parse(localStorage.getItem("highscoresArray"));
         highscoresArray = storedHighscores;
-
-        // Clear highscores element and content div
-        $highscoresOl.innerHTML = "";
-        $contentDiv.innerHTML = "";
 
         // Render a new li for each highscore
         for (var j = 0; j < highscoresArray.length; j++) {
             var highscoreLi = highscoresArray[j];
 
-            var li = $("<li class='m4'>" + highscoreLi + "</li>");
+            var li = $("<li class='m4 scores-list'>" + highscoreLi + "</li>");
             // li.text(highscoreLi);
             $highscoresOl.append(li);
         }
@@ -186,13 +203,8 @@ $(document).ready(function () {
     }
 
     $viewScoresBtn.on("click", function () {
-        alert("clicked");
-        content.innerHTML = "";
         renderHighScores();
     });
 
-
-    $("#goBackBtn").on("click", function () {
-    });
 
 });
