@@ -76,14 +76,11 @@ $(document).ready(function () {
                     // concatenate the new string with the number of seconds left to create the high score
                     newHighScore = $initials + " - " + secondsLeft;
 
-                    // following code is based on the Todos activity
-                    var highscoresText = newHighScore.value;
-
-                    // Add new todoText to todos array, clear the input
-                    highscoresArray.push(highscoresText);
+                    // Adds the new highscore to highscores array, clear the input
+                    highscoresArray.push(newHighScore);
 
                     storeHighscores();
-                    renderHighScores()
+                    renderHighScores();
 
                 });
 
@@ -99,7 +96,6 @@ $(document).ready(function () {
             content.innerHTML = "";
             var $newQuestionTitle = $("<div class='text-muted'><br><h3>" + questions[currentQ].title + "</h3></div>");
             $contentDiv.append($newQuestionTitle);
-            console.log(questions[currentQ].choices);
 
             // this for loop inspired by refridgerator acitivity for loop
             for (var i = 0; i < questions[currentQ].choices.length; i++) {
@@ -154,19 +150,39 @@ $(document).ready(function () {
 
     // ** FOR HIGHSCORES ** //
 
+    // function init() {
+    //     // Write code here to check if there are highscores in localStorage
+    //     // If so, parse the value from localStorage and assign it to the highscores variable
+    //     var storedHighscores = JSON.parse(localStorage.getItem("highscoresArray"));
+
+    //     if (storedHighscores !== null) {
+    //         highscoresArray = storedHighscores;
+    //     }
+
+    //     // Store updated highscores in localStorage, re-render the list
+    //     renderHighScores();
+    // }
+
     // The following block of code is based on the Todos activity
     function renderHighScores() {
-        // Clear todoList element and update todoCountSpan
+
+        var storedHighscores = JSON.parse(localStorage.getItem("highscoresArray"));
+        highscoresArray = storedHighscores;
+
+        // Clear highscores element and content div
         $highscoresOl.innerHTML = "";
+        $contentDiv.innerHTML = "";
 
         // Render a new li for each highscore
         for (var j = 0; j < highscoresArray.length; j++) {
             var highscoreLi = highscoresArray[j];
 
-            var li = $("<li>" + highscoreLi + "</li>");
+            var li = $("<li class='m4'>" + highscoreLi + "</li>");
             // li.text(highscoreLi);
             $highscoresOl.append(li);
         }
+
+        console.log(newHighScore);
     }
 
     $viewScoresBtn.on("click", function () {
